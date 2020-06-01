@@ -1,0 +1,125 @@
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.MediaType
+import java.util.concurrent.TimeUnit
+import com.google.gson.Gson
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'http://developer.huawei.com/repo/' }
+        maven { url "https://jitpack.io" }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
+    }
+    dependencies {
+        classpath "com.squareup.okhttp3:okhttp:4.2.2"
+        classpath "com.google.code.gson:gson:2.8.6"
+    }
+}
+
+def versionPropsFile = file('version.properties')
+def Properties versionProps
+def APK_PATH
+int appVersionCodeUpload = 1
+String appVersionNameUpload = '1.0'
+String flavor
+if (versionPropsFile.canRead()) {
+    versionProps = new Properties()
+
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    appVersionCodeUpload = versionProps['VERSION_CODE'].toInteger()
+    appVersionNameUpload = versionProps['VERSION_NAME']
+    String projectstr = versionProps['project']
+    String[] projects = projectstr.split(',')
+    flavor = projects[0]
+    appVersionCodeUpload = versionProps['version.code.' + flavor].toInteger()
+    appVersionNameUpload = versionProps['version.name.' + flavor]
+    def outputName = "Test_${appVersionNameUpload}_build_${flavor}_${appVersionCodeUpload}_armeabi-v7a_release.apk"
+    APK_PATH = "app/build/outputs/apk/${flavor}/release/${outputName}"
+}
+
+/**
+ * 蒲公英 上传脚本
+ * */
+ext.pgyerConfig = [
+        "api_key"         : "配置api_key",
+//        "user_key": "",
+
+        //需要上传的APK,相对路径/绝对路径
+        "apkPath"         : APK_PATH,
+
+        "buildInstallType": "2",
+        "buildPassword"   : "123",
+
+        //请求的api地址
+        "pgyerUrl"        : "https://www.pgyer.com/apiv2/app/upload",
+
+        //官网
+        "pgyer"           : "https://www.pgyer.com/"
+]
+//其他参数配置
+def paramsConfig = [:]
+
+task _pgyerUpload(dependsOn: 'assembleRelease') {
+}
+
+_pgyerUpload.doFirst {
+    def apkPath = pgyerConfig.apkPath
+    if (apkPath == null) {
+        throw IllegalStateException("请指定上传的文件")
+    }
+    def apkFile = new File(apkPath)
+    if (!apkFile.exists()) {
+        throw IllegalStateException("需要上传的文件不存在:" + apkFile.getAbsolutePath())
+    }
+
+    def clientBuilder = new OkHttpClient.Builder()
+    clientBuilder.connectTimeout(10, TimeUnit.SECONDS)
+    clientBuilder.readTimeout(60, TimeUnit.SECONDS)
+
+    OkHttpClient client = clientBuilder.build()
+
+    def bodyBuilder = new MultipartBody.Builder()
+    bodyBuilder.setType(MultipartBody.FORM)
+
+    bodyBuilder.addFormDataPart("_api_key", new String(pgyerConfig.api_key))
+    bodyBuilder.addFormDataPart("buildInstallType", new String(pgyerConfig.buildInstallType))
+    bodyBuilder.addFormDataPart("buildPassword", new String(pgyerConfig.buildPassword))
+
+    bodyBuilder.addFormDataPart("file",
+            apkFile.name,
+            RequestBody.create(
+                    MediaType.parse("application/vnd.android.package-archive"),
+                    apkFile)
+    )
+
+    HashMap<String, String> params = paramsConfig
+    for (String key : params.keySet()) {
+        //println("add part key: " + key + " value: " + params.get(key))
+        bodyBuilder.addFormDataPart(key, params.get(key))
+    }
+
+    def request = new Request.Builder()
+            .url(pgyerConfig.pgyerUrl)
+            .post(bodyBuilder.build())
+            .build()
+
+    println "上传至蒲公英:" + pgyerConfig.pgyer
+
+    def response = client.newCall(request).execute()
+
+    if (response == null || response.body() == null) {
+        println "蒲公英上传结果失败"
+        return null
+    }
+    def json = response.body().string()
+    response.close()
+
+    println "蒲公英上传结果:" + json
+    println "蒲公英安装地址: " + pgyerConfig.pgyer + new Gson().fromJson(json, Map.class).data.buildShortcutUrl
+}
+
