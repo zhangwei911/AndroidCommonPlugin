@@ -34,5 +34,6 @@ patchPluginXml {
       add upload to pgyer.com gradle config.<br>"""
 }
 publishPlugin{
-    token = System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
+    channels 'beta'
+    token System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
 }

@@ -43,5 +43,9 @@
             description="添加上传到蒲公英gradle">
             <add-to-group group-id="CodeMenu" anchor="last" />
         </action>
+        <action id="generateUploadLibToLocalGradle" class="viz.plugin.android.MavenAction" text="添加上传库到本地Maven库gradle"
+            description="添加上传到本地Maven库gradle">
+            <add-to-group group-id="CodeMenu" anchor="last" />
+        </action>
     </actions>
 </idea-plugin>
