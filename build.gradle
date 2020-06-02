@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'viz.plugin'
-version '1.0-SNAPSHOT'
+version '1.0.3-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,10 +28,7 @@ compileTestKotlin {
 }
 patchPluginXml {
     changeNotes """
-    add version gradle config.<br>
-      add sign gradle config.<br>
-      add apk name gradle config.<br>
-      add upload to pgyer.com gradle config.<br>"""
+      move action to group.<br>"""
 }
 publishPlugin{
     channels 'beta'
