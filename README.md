@@ -7,4 +7,4 @@
 
 #### 截图
 
-![https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/LICENSE/capture/1.png](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/LICENSE/capture/1.png)
+![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/LICENSE/capture/1.png)
