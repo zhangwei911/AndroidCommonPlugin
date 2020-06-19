@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'viz.plugin'
-version '1.0.3-SNAPSHOT'
+version '1.0.5-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,9 +28,8 @@ compileTestKotlin {
 }
 patchPluginXml {
     changeNotes """
-      move action to group.<br>"""
+      update description<br>"""
 }
 publishPlugin{
-    channels 'beta'
     token System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
 }

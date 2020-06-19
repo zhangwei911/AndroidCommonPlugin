@@ -9,6 +9,7 @@
       add apk name gradle config.<br>
       add upload to pgyer.com gradle config.<br>
       add upload lib to local gradle config.<br>
+      <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/LICENSE/capture/1.png"/>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -29,26 +30,21 @@
     <actions>
         <!-- Add your actions here -->
         <group id="generateCommonGradle" text="Android通用Gradle" popup="true">
-            <add-to-group group-id="CodeMenu" anchor="last" />
+            <add-to-group group-id="CodeMenu" anchor="last"/>
             <action id="generateVersionGradle" class="viz.plugin.android.VersionAction"
                 text="添加版本gradle" description="将版本配置放到properties中">
-                <add-to-group group-id="CodeMenu" anchor="last" />
             </action>
             <action id="generateSignGradle" class="viz.plugin.android.SignAction" text="添加签名gradle"
                 description="将签名配置放到gradle中">
-                <add-to-group group-id="CodeMenu" anchor="last" />
             </action>
             <action id="generateNameGradle" class="viz.plugin.android.NameAction" text="添加命名gradle"
                 description="将命名配置放到gradle中">
-                <add-to-group group-id="CodeMenu" anchor="last" />
             </action>
             <action id="generateUploadToPgyGradle" class="viz.plugin.android.UploadToPgyAction"
                 text="添加上传到蒲公英gradle" description="添加上传到蒲公英gradle">
-                <add-to-group group-id="CodeMenu" anchor="last" />
             </action>
             <action id="generateUploadLibToLocalGradle" class="viz.plugin.android.MavenAction"
                 text="添加上传库到本地Maven库gradle" description="添加上传到本地Maven库gradle">
-                <add-to-group group-id="CodeMenu" anchor="last" />
             </action>
         </group>
     </actions>

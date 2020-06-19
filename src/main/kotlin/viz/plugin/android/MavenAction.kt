@@ -26,7 +26,7 @@ internal class MavenAction : AnAction() {
                 FilenameIndex.getFilesByName(project, "build.gradle", GlobalSearchScope.allScope(project))
         if (psiFiles.isNotEmpty()) {
             psiFiles.forEach {
-                if (it.text.contains("apply plugin: 'com.android.application'")) {
+                if (it.text.contains("apply plugin: 'com.android.library'")) {
                     if (it.text.contains("apply from:'maven.gradle'")) {
                         println("maven.gradle already reference")
                         return@forEach
