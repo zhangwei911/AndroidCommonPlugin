@@ -9,7 +9,7 @@
       add apk name gradle config.<br>
       add upload to pgyer.com gradle config.<br>
       add upload lib to local gradle config.<br>
-      <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/LICENSE/capture/1.png"/>
+      <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.png"/>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
