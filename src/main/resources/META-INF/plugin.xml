@@ -44,7 +44,10 @@
                 text="添加上传到蒲公英gradle" description="添加上传到蒲公英gradle">
             </action>
             <action id="generateUploadLibToLocalGradle" class="viz.plugin.android.MavenAction"
-                text="添加上传库到本地Maven库gradle" description="添加上传到本地Maven库gradle">
+                    text="添加上传库到本地Maven库gradle" description="添加上传到本地Maven库gradle">
+            </action>
+            <action id="generateUploadLibToBintrayGradle" class="viz.plugin.android.BintrayAction"
+                    text="添加上传库到Bintray库gradle" description="添加上传到Bintray库gradle">
             </action>
         </group>
     </actions>
