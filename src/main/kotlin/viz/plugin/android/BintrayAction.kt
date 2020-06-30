@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.fileTypes.FileTypes
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.search.FilenameIndex
@@ -63,5 +64,6 @@ internal class BintrayAction : AnAction() {
                 }
             }
         }
+        Messages.showMessageDialog("请到bintray.properties中配置相关信息", "提示", Messages.getInformationIcon())
     }
 }

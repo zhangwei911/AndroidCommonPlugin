@@ -77,23 +77,32 @@ object FileUtil {
      * @param psiFile 新建文件所在目录下的文件
      * @param project project对象
      */
-    fun createFileFromTemplate(fileName: String, fileNameNew: String, psiFile: PsiFile, project: Project) {
-        val content = getResources(fileName)
+    fun createFileFromTemplate(fileName: String, fileNameNew: String, psiFile: PsiFile, project: Project, replaceList: MutableList<Pair<String, String>> = mutableListOf()) {
+        var content = getResources(fileName)
         if (content == null) {
             println("$fileName not exsit")
             return
         }
-        val newFile = PsiFileFactory.getInstance(project).createFileFromText(fileNameNew, FileTypes.PLAIN_TEXT, content)
+        replaceList.forEach {
+            if(it.first.isNotEmpty()) {
+                content = content!!.replace(it.first, it.second)
+            }
+        }
+        val newFile = PsiFileFactory.getInstance(project).createFileFromText(fileNameNew, FileTypes.PLAIN_TEXT, content!!)
         psiFile.parent?.add(newFile)
     }
 
-    fun createFileBatchFromTemplate(fileNamePairs: MutableList<Pair<String, String>>, psiFiles: MutableList<PsiFile>, project: Project) {
+    fun createFileBatchFromTemplate(fileNamePairs: MutableList<Pair<String, String>>, psiFiles: MutableList<PsiFile>, project: Project, replaceLists: MutableList<MutableList<Pair<String, String>>> = mutableListOf()) {
         if (fileNamePairs.size != psiFiles.size) {
             println("fileNamePairs.size(${fileNamePairs.size}) != psiFiles.size(${psiFiles.size})")
             return
         }
         fileNamePairs.forEachIndexed { index, filePair ->
-            createFileFromTemplate(filePair.first, filePair.second, psiFiles[index], project)
+            if (replaceLists.isEmpty()) {
+                createFileFromTemplate(filePair.first, filePair.second, psiFiles[index], project)
+            } else {
+                createFileFromTemplate(filePair.first, filePair.second, psiFiles[index], project, replaceLists[index])
+            }
         }
     }
 }

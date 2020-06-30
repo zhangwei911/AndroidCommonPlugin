@@ -10,6 +10,7 @@
       add upload to pgyer.com gradle config.<br>
       add upload lib to local gradle config.<br>
       add upload lib to bintray gradle config.<br>
+      maven gradle add dialog to set some properties<br>
       <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.gif"/>
     ]]></description>
 
