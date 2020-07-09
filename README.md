@@ -4,6 +4,8 @@
 2. 签名脚本
 3. APK命名脚本
 4. 上传到蒲公英脚本
+5. 添加上传到本地Maven库gradle
+6. 添加上传到Bintray库gradle
 
 #### 截图
 
