@@ -7,4 +7,5 @@
 
 #### 截图
 
-![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.png)
+![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.gif?raw=true)
+![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/2.gif?raw=true)
