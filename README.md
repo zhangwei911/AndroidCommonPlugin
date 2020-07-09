@@ -1,5 +1,7 @@
 # 自动添加Android通用Gradle脚本
 
+插件地址[https://plugins.jetbrains.com/plugin/14419-androidcommon](https://plugins.jetbrains.com/plugin/14419-androidcommon)
+
 1. 版本脚本
 2. 签名脚本
 3. APK命名脚本
