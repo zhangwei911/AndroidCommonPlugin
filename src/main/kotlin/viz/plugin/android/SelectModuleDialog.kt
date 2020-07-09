@@ -132,7 +132,7 @@ class SelectModuleDialog : DialogWrapper {
                             Messages.getErrorIcon()
                     )
                 }
-                if (psiFile.text.contains("apply plugin: 'com.android.library'")) {
+                if (psiFile.text.contains("com.android.library")) {
                     if (psiFile.text.contains("apply from:'maven.gradle'")) {
                         println("maven.gradle already reference")
                         Messages.showMessageDialog(
