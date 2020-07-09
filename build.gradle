@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'viz.plugin'
-version '1.0.9-SNAPSHOT'
+version '1.0.11-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,15 @@ compileTestKotlin {
 }
 patchPluginXml {
     changeNotes """
-      update description<br>"""
+    add version gradle config.<br>
+      add sign gradle config.<br>
+      add apk name gradle config.<br>
+      add upload to pgyer.com gradle config.<br>
+      add upload lib to local gradle config.<br>
+      add upload lib to bintray gradle config.<br>
+      maven gradle add dialog to set some properties<br>
+      <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.gif?raw=true"/><br/>
+      <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/2.gif?raw=true"/>"""
 }
 publishPlugin{
     token System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")
