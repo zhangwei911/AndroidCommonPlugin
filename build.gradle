@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'viz.plugin'
-version '1.0.13-SNAPSHOT'
+version '1.0.14-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -37,7 +37,8 @@ patchPluginXml {
       maven gradle add dialog to set some properties<br>
       <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.gif?raw=true"/><br/>
       <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/2.gif?raw=true"/><br/>
-      fix check library error when use plugins{id 'com.android.libray'}"""
+      fix check library error when use plugins{id 'com.android.libray'}<br/>
+      bintray gradle add dialog to set some properties<br/>"""
 }
 publishPlugin{
     token System.getenv("ORG_GRADLE_PROJECT_intellijPublishToken")

@@ -25,10 +25,12 @@ class SelectModuleDialog : DialogWrapper {
     private var label_version: JLabel? = null
     private var textField_version: JTextField? = null
     private var psiFiles: MutableList<PsiFile> = mutableListOf()
+    private var type = 0
 
-    constructor(project: Project) : super(project) {
+    constructor(project: Project, type: Int) : super(project) {
         title = "Select Module"
         this.project = project
+        this.type = type
         init()
     }
 
@@ -104,17 +106,39 @@ class SelectModuleDialog : DialogWrapper {
                 if (rootBuildGradle != null) {
                     val rootBuildGradlePsiFile = PsiManager.getInstance(project!!).findFile(rootBuildGradle)
                     if (rootBuildGradlePsiFile != null) {
-                        if (rootBuildGradlePsiFile.text.contains("getRepositoryDir")) {
+                        if (rootBuildGradlePsiFile.text.contains("getRepositoryDir") && type == 0) {
                             println("本地库地址已添加")
                         } else {
                             val document = PsiDocumentManager.getInstance(project!!).getDocument(rootBuildGradlePsiFile)
                                     ?: return
-                            document.setText(
-                                    rootBuildGradlePsiFile.text.replace(
-                                            Regex("allprojects[ ].*\\{\n[ ].*repositories[ ].*\\{"), "allprojects {\n" +
-                                            "    repositories {\nmaven{url getRepositoryDir()}\n"
-                                    ) + FileUtil.getResources("localRepo.txt")
-                            )
+                            if (type == 0) {
+                                document.setText(
+                                        rootBuildGradlePsiFile.text.replace(
+                                                Regex("allprojects[ ].*\\{\n[ ].*repositories[ ].*\\{"), "allprojects {\n" +
+                                                "    repositories {\nmaven{url getRepositoryDir()}\n"
+                                        ) + FileUtil.getResources("localRepo.txt")
+                                )
+                            } else if (type == 1) {
+                                var newRootBuildGradleText = rootBuildGradlePsiFile.text
+                                var containsCount = 0
+                                if (!rootBuildGradlePsiFile.text.contains("classpath 'com.github.dcendents:android-maven-gradle-plugin")) {
+                                    newRootBuildGradleText = newRootBuildGradleText.replace(Regex("(classpath 'com.android.tools.build:gradle:[a-zA-Z0-9.-_].*')"), "$1\n" +
+                                            "        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'\n")
+                                    containsCount++
+                                } else {
+                                    println("根目录build.gradle已包含com.github.dcendents:android-maven-gradle-plugin")
+                                }
+                                if (!rootBuildGradlePsiFile.text.contains("classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin")) {
+                                    newRootBuildGradleText = newRootBuildGradleText.replace(Regex("(classpath 'com.android.tools.build:gradle:[a-zA-Z0-9.-_].*')"), "$1\n" +
+                                            "        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'\n")
+                                    containsCount++
+                                } else {
+                                    println("根目录build.gradle已包含com.jfrog.bintray.gradle:gradle-bintray-plugin")
+                                }
+                                if (containsCount > 0) {
+                                    document.setText(newRootBuildGradleText)
+                                }
+                            }
                         }
                     } else {
                         println("根目录没有build.gradle")
@@ -133,7 +157,7 @@ class SelectModuleDialog : DialogWrapper {
                     )
                 }
                 if (psiFile.text.contains("com.android.library")) {
-                    if (psiFile.text.contains("apply from:'maven.gradle'")) {
+                    if (psiFile.text.contains("apply from:'maven.gradle'") && type == 0) {
                         println("maven.gradle already reference")
                         Messages.showMessageDialog(
                                 "The module maven.gradle already reference",
@@ -141,30 +165,61 @@ class SelectModuleDialog : DialogWrapper {
                                 Messages.getWarningIcon()
                         )
                         return
+                    } else if (psiFile.text.contains("apply from:'bintray.gradle'") && type == 1) {
+                        println("bintray.gradle already reference")
+                        Messages.showMessageDialog(
+                                "The module bintray.gradle already reference",
+                                "Tips",
+                                Messages.getWarningIcon()
+                        )
+                        return
                     }
                     val document = PsiDocumentManager.getInstance(project!!).getDocument(psiFile)
                     if (document != null) {
-                        document.setText(
-                                psiFile.text.replace(Regex("android[ ].*\\{"), "apply from:'maven.gradle'\nandroid {\n")
-                        )
-                        FileUtil.createFileBatchFromTemplate(
-                                mutableListOf(
-                                        Pair("maven.gradle", "maven.gradle"),
-                                        Pair("maven-info.gradle", "maven-info.gradle"),
-                                        Pair("maven-info.properties", "maven-info.properties")
-                                ), mutableListOf(psiFile, psiFile, psiFile), project!!,
-                                mutableListOf(mutableListOf(
-                                        Pair("", "")
-                                ),mutableListOf(
-                                        Pair("viz.commonlib", groupId),
-                                        Pair("test", artifaceId),
-                                        Pair("1.0.0", version)
-                                ),mutableListOf(
-                                        Pair("viz.commonlib", groupId),
-                                        Pair("test", artifaceId),
-                                        Pair("1.0.0", version)
-                                ))
-                        )
+                        if (type == 0) {
+                            document.setText(
+                                    psiFile.text.replace(Regex("android[ ].*\\{"), "apply from:'maven.gradle'\nandroid {\n")
+                            )
+                            FileUtil.createFileBatchFromTemplate(
+                                    mutableListOf(
+                                            Pair("maven.gradle", "maven.gradle"),
+                                            Pair("maven-info.gradle", "maven-info.gradle"),
+                                            Pair("maven-info.properties", "maven-info.properties")
+                                    ), mutableListOf(psiFile, psiFile, psiFile), project!!,
+                                    mutableListOf(mutableListOf(
+                                            Pair("", "")
+                                    ), mutableListOf(
+                                            Pair("viz.commonlib", groupId),
+                                            Pair("test", artifaceId),
+                                            Pair("1.0.0", version)
+                                    ), mutableListOf(
+                                            Pair("viz.commonlib", groupId),
+                                            Pair("test", artifaceId),
+                                            Pair("1.0.0", version)
+                                    ))
+                            )
+                        } else if (type == 1) {
+                            document.setText(
+                                    psiFile.text.replace(
+                                            Regex("android[ ].*\\{"),
+                                            "apply from:'bintray.gradle'\nandroid {\n"
+                                    ) + "\npackageTask()"
+                            )
+                            FileUtil.createFileBatchFromTemplate(
+                                    mutableListOf(
+                                            Pair("bintray.gradle", "bintray.gradle"),
+                                            Pair("bintray.properties", "bintray.properties")
+                                    ), mutableListOf(psiFile, psiFile), project!!,
+                                    mutableListOf(mutableListOf(
+                                            Pair("", "")
+                                    ), mutableListOf(
+                                            Pair("yourgroup", groupId),
+                                            Pair("openvidu", artifaceId),
+                                            Pair("1.0.0", version)
+                                    ))
+                            )
+                            Messages.showMessageDialog("请到local.properties中配置bintray.user和bintray.apikey,并在bintray.properties中配置相关信息", "提示", Messages.getInformationIcon())
+                        }
                     } else {
                         println("获取document失败")
                         Messages.showMessageDialog(

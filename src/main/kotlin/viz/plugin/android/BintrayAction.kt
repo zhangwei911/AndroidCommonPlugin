@@ -13,7 +13,7 @@ import com.intellij.psi.search.GlobalSearchScope
 
 /**
  * @author zhangwei
- * @title: AndroidAction
+ * @title: BintrayAction
  * @projectName AndroidCommonPlugin
  * @description:
  * @date 2020/5/30 15:16
@@ -21,49 +21,7 @@ import com.intellij.psi.search.GlobalSearchScope
 internal class BintrayAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project as Project
-        val application = ApplicationManager.getApplication()
-        var androidComponent = application.getComponent(AndroidComponent::class.java)
-        val psiFiles =
-            FilenameIndex.getFilesByName(project, "build.gradle", GlobalSearchScope.allScope(project))
-        if (psiFiles.isNotEmpty()) {
-            psiFiles.forEach {
-                if (it.text.contains("apply plugin: 'com.android.library'")) {
-                    if (it.text.contains("apply from:'bintray.gradle'")) {
-                        println("bintray.gradle already reference")
-                        return@forEach
-                    }
-                    val document = PsiDocumentManager.getInstance(project).getDocument(it)
-                        ?: return@forEach
-                    document.setText(
-                        it.text.replace(
-                            Regex("android[ ].*\\{"),
-                            "apply from:'bintray.gradle'\nandroid {\n"
-                        ) + "\npackageTask()"
-                    )
-                    FileUtil.createFileBatchFromTemplate(
-                        mutableListOf(
-                            Pair("bintray.gradle", "bintray.gradle"),
-                            Pair("bintray.properties", "bintray.properties")
-                        ), mutableListOf(it, it), project
-                    )
-                    return@forEach
-                } else if (it.text.contains(Regex("buildscript[ ].*\\{"))) {
-                    if (it.text.contains("getRepositoryDir")) {
-                        println("本地库地址已添加")
-                        return@forEach
-                    }
-                    val document = PsiDocumentManager.getInstance(project).getDocument(it)
-                        ?: return@forEach
-                    document.setText(
-                        it.text.replace(
-                            Regex("classpath 'com.android.tools.build:gradle:[a-zA-Z0-9.\\-_]'"), "$1\n" +
-                                    "        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'\n" +
-                                    "        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'"
-                        )
-                    )
-                }
-            }
-        }
-        Messages.showMessageDialog("请到bintray.properties中配置相关信息", "提示", Messages.getInformationIcon())
+        val dialog = SelectModuleDialog(project, 1)
+        dialog.show()
     }
 }

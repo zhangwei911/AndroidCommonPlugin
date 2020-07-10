@@ -21,7 +21,7 @@ internal class MavenAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.project as Project
         val application = ApplicationManager.getApplication()
-        val dialog = SelectModuleDialog(project)
+        val dialog = SelectModuleDialog(project, 0)
         dialog.show()
     }
 }

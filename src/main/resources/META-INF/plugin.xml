@@ -13,7 +13,8 @@
       maven gradle add dialog to set some properties<br>
       <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.gif?raw=true"/><br/>
       <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/2.gif?raw=true"/><br/>
-      fix check library error when use plugins{id 'com.android.libray'}
+      fix check library error when use plugins{id 'com.android.libray'}<br/>
+      bintray gradle add dialog to set some properties<br/>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
