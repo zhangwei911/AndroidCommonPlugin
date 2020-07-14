@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'viz.plugin'
-version '1.0.14-SNAPSHOT'
+version '1.0.15-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -28,6 +28,9 @@ compileTestKotlin {
 }
 patchPluginXml {
     changeNotes """
+    2020/07/14
+    add create new common lib project action and settings
+    
     add version gradle config.<br>
       add sign gradle config.<br>
       add apk name gradle config.<br>

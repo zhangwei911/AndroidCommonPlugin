@@ -15,6 +15,8 @@
       <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/2.gif?raw=true"/><br/>
       fix check library error when use plugins{id 'com.android.libray'}<br/>
       bintray gradle add dialog to set some properties<br/>
+      add create new common lib project action and settings<br\>
+      <image src="https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/3.gif?raw=true"/><br/>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -23,6 +25,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <applicationConfigurable
+            instance="viz.plugin.android.settings.NewCommonLibSettingsConfigurable" />
+        <applicationService serviceInterface="viz.plugin.android.settings.NewCommonLibSettings"
+            serviceImplementation="viz.plugin.android.settings.NewCommonLibSettings" />
     </extensions>
 
     <application-components>
@@ -35,25 +41,21 @@
     <actions>
         <!-- Add your actions here -->
         <group id="generateCommonGradle" text="Android通用Gradle" popup="true">
-            <add-to-group group-id="CodeMenu" anchor="last"/>
+            <add-to-group group-id="CodeMenu" anchor="last" />
             <action id="generateVersionGradle" class="viz.plugin.android.VersionAction"
-                text="添加版本gradle" description="将版本配置放到properties中">
-            </action>
+                text="添加版本gradle" description="将版本配置放到properties中"></action>
             <action id="generateSignGradle" class="viz.plugin.android.SignAction" text="添加签名gradle"
-                description="将签名配置放到gradle中">
-            </action>
+                description="将签名配置放到gradle中"></action>
             <action id="generateNameGradle" class="viz.plugin.android.NameAction" text="添加命名gradle"
-                description="将命名配置放到gradle中">
-            </action>
+                description="将命名配置放到gradle中"></action>
             <action id="generateUploadToPgyGradle" class="viz.plugin.android.UploadToPgyAction"
-                text="添加上传到蒲公英gradle" description="添加上传到蒲公英gradle">
-            </action>
+                text="添加上传到蒲公英gradle" description="添加上传到蒲公英gradle"></action>
             <action id="generateUploadLibToLocalGradle" class="viz.plugin.android.MavenAction"
-                    text="添加上传库到本地Maven库gradle" description="添加上传到本地Maven库gradle">
-            </action>
+                text="添加上传库到本地Maven库gradle" description="添加上传到本地Maven库gradle"></action>
             <action id="generateUploadLibToBintrayGradle" class="viz.plugin.android.BintrayAction"
-                    text="添加上传库到Bintray库gradle" description="添加上传到Bintray库gradle">
-            </action>
+                text="添加上传库到Bintray库gradle" description="添加上传到Bintray库gradle"></action>
+            <action id="newCommonLib" class="viz.plugin.android.NewCommonLibAction"
+                text="新建库项目" description="新建库项目"></action>
         </group>
     </actions>
 </idea-plugin>

@@ -6,6 +6,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiFileFactory
 import java.io.*
 import java.nio.charset.StandardCharsets
+import java.util.zip.ZipInputStream
 
 /**
  * @title: FileUtil
@@ -84,7 +85,7 @@ object FileUtil {
             return
         }
         replaceList.forEach {
-            if(it.first.isNotEmpty()) {
+            if (it.first.isNotEmpty()) {
                 content = content!!.replace(it.first, it.second)
             }
         }
@@ -104,5 +105,68 @@ object FileUtil {
                 createFileFromTemplate(filePair.first, filePair.second, psiFiles[index], project, replaceLists[index])
             }
         }
+    }
+
+    /**
+     * 解压zip
+     */
+    fun unzip(zipPath: String, unzipPath: String) {
+        val zipFile = File(zipPath)    //压缩文件
+        unzipFromInputStream(FileInputStream(zipFile), unzipPath)
+    }
+
+    /**
+     * 解压zip
+     */
+    fun unzipFromInputStream(zipInputStream: InputStream, unzipPath: String) {
+        val unzipRoot = File(unzipPath)    //解压目录
+        val zip = ZipInputStream(zipInputStream)
+        var entry = zip.nextEntry
+        unzipRoot.mkdir()
+        while (entry != null) {
+            val current = File(unzipPath, entry.name)
+            if (entry.isDirectory) {
+                current.mkdirs()
+            } else {
+                current.parentFile?.mkdirs()
+                zip.buffered().copyTo(current.outputStream())
+            }
+            entry = zip.nextEntry
+        }
+        zip.closeEntry()
+        zipInputStream.close()
+    }
+
+    /**
+     * 解压zip
+     */
+    fun unzipFromResources(zipPath: String, unzipPath: String) {
+        val inputStreamZip = javaClass.classLoader.getResourceAsStream(zipPath)
+        if (inputStreamZip != null) {
+            unzipFromInputStream(inputStreamZip, unzipPath)
+        }
+    }
+
+    /**
+     * 重命名文件
+     *
+     * @param oldPath 原来的文件地址
+     * @param newPath 新的文件地址
+     */
+    fun renameFile(oldPath: String, newPath: String) {
+        val oldFile = File(oldPath)
+        val newFile = File(newPath)
+        renameFile(oldFile, newFile)
+    }
+
+    /**
+     * 重命名文件
+     *
+     * @param oldFile 原来的文件
+     * @param newFile 新的文件
+     */
+    fun renameFile(oldFile: File, newFile: File) {
+        //执行重命名
+        oldFile.renameTo(newFile)
     }
 }

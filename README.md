@@ -2,6 +2,11 @@
 
 插件地址[https://plugins.jetbrains.com/plugin/14419-androidcommon](https://plugins.jetbrains.com/plugin/14419-androidcommon)
 
+#### 更新记录
+2020/07/14
+新增通用库项目模板添加功能
+-  根据配置信息新建一个库项目
+
 1. 版本脚本
 2. 签名脚本
 3. APK命名脚本
@@ -13,3 +18,4 @@
 
 ![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/1.gif?raw=true)
 ![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/2.gif?raw=true)
+![img](https://github.com/zhangwei911/AndroidCommonPlugin/blob/master/capture/3.gif?raw=true)
